@@ -5,3 +5,5 @@ venv/
 .env.docker
 .idea/
 .vscode/
+frontend/node_modules/
+frontend/dist/

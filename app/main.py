@@ -2,6 +2,7 @@ import os
 
 from dotenv import load_dotenv
 from fastapi import Depends, FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 
@@ -11,6 +12,14 @@ from app.database import Base, engine, get_db
 load_dotenv()
 
 app = FastAPI(title="FastAPI URL Shortener")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 BASE_URL = os.getenv("BASE_URL")
 
