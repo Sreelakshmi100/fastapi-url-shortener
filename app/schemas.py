@@ -1,11 +1,11 @@
 from datetime import datetime
-from pydantic import BaseModel, HttpUrl
+from pydantic import BaseModel, HttpUrl, Field
 from typing import Optional
 
 
 class URLCreate(BaseModel):
     original_url: HttpUrl
-    custom_alias: Optional[str] = None
+    custom_alias: Optional[str] = Field(default=None, max_length=50)
 
 
 class URLResponse(BaseModel):

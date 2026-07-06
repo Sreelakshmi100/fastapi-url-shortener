@@ -2,5 +2,6 @@ venv/
 **pycache**/
 *.pyc
 .env
+.env.docker
 .idea/
 .vscode/
