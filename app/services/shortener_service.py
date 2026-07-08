@@ -1,15 +1,13 @@
 from sqlalchemy.orm import Session
 
-from app import models, schemas
+
+from app.models.short_url import ShortURL
+from app.schemas.short_url import URLCreate
 from app.utils import generate_short_code, is_valid_custom_alias
 
 
 def get_url_by_short_code(db: Session, short_code: str):
-    return (
-        db.query(models.ShortURL)
-        .filter(models.ShortURL.short_code == short_code)
-        .first()
-    )
+    return db.query(ShortURL).filter(ShortURL.short_code == short_code).first()
 
 
 def generate_unique_short_code(db: Session) -> str:
@@ -21,7 +19,7 @@ def generate_unique_short_code(db: Session) -> str:
     return short_code
 
 
-def create_short_url(db: Session, url_data: schemas.URLCreate):
+def create_short_url(db: Session, url_data: URLCreate):
     if url_data.custom_alias:
         short_code = url_data.custom_alias
 
@@ -35,9 +33,7 @@ def create_short_url(db: Session, url_data: schemas.URLCreate):
     else:
         short_code = generate_unique_short_code(db)
 
-    db_url = models.ShortURL(
-        original_url=str(url_data.original_url), short_code=short_code
-    )
+    db_url = ShortURL(original_url=str(url_data.original_url), short_code=short_code)
 
     db.add(db_url)
     db.commit()
@@ -46,7 +42,7 @@ def create_short_url(db: Session, url_data: schemas.URLCreate):
     return db_url
 
 
-def increment_click_count(db: Session, db_url: models.ShortURL):
+def increment_click_count(db: Session, db_url: ShortURL):
     db_url.clicks += 1
     db.commit()
     db.refresh(db_url)
