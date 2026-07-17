@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 
 
 from app.models.short_url import ShortURL
+from app.models.user import User
 from app.schemas.short_url import URLCreate
 from app.utils import generate_short_code, is_valid_custom_alias
 
@@ -19,7 +20,11 @@ def generate_unique_short_code(db: Session) -> str:
     return short_code
 
 
-def create_short_url(db: Session, url_data: URLCreate):
+def create_short_url(
+    db: Session,
+    url_data: URLCreate,
+    current_user: User,
+):
     if url_data.custom_alias:
         short_code = url_data.custom_alias
 
@@ -33,7 +38,11 @@ def create_short_url(db: Session, url_data: URLCreate):
     else:
         short_code = generate_unique_short_code(db)
 
-    db_url = ShortURL(original_url=str(url_data.original_url), short_code=short_code)
+    db_url = ShortURL(
+        original_url=str(url_data.original_url),
+        short_code=short_code,
+        owner=current_user,
+    )
 
     db.add(db_url)
     db.commit()

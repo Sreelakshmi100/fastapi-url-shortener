@@ -4,6 +4,32 @@
   padding: 3rem 1.5rem;
 }
 
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.user-chip {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.logout-btn {
+  padding: 0.4rem 0.85rem;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  color: #333;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.logout-btn:hover {
+  background: #f3f4f6;
+}
+
 header {
   text-align: center;
   margin-bottom: 2rem;
@@ -18,6 +44,29 @@ header h1 {
 header p {
   margin: 0;
   color: #666;
+}
+
+.auth-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.tab {
+  padding: 0.65rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: white;
+  color: #555;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.tab.active {
+  background: #4f46e5;
+  border-color: #4f46e5;
+  color: white;
 }
 
 form {

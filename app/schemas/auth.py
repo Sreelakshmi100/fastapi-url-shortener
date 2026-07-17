@@ -5,8 +5,8 @@ from pydantic import BaseModel, EmailStr
 
 
 class UserSignUp(BaseModel):
-    username: str
-    email: EmailStr
+    username: Optional[str] = None
+    email: Optional[EmailStr] = None
     password: str
 
 

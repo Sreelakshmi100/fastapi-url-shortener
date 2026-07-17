@@ -1,8 +1,9 @@
 import os
 from dotenv import load_dotenv
+from fastapi import HTTPException, status
 from passlib.context import CryptContext
 from datetime import datetime, timedelta, timezone
-from jose import jwt
+from jose import ExpiredSignatureError, JWTError, jwt
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -36,3 +37,25 @@ def create_access_token(data: dict):
     )
 
     return encoded_jwt
+
+
+def decode_access_token(token: str) -> dict:
+    try:
+        payload = jwt.decode(
+            token,
+            SECRET_KEY,
+            algorithms=[ALGORITHM],
+        )
+        return payload
+
+    except ExpiredSignatureError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Access token has expired",
+        )
+
+    except JWTError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid access token",
+        )

@@ -5,10 +5,12 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 
+from app.models.user import User
 from app.schemas.short_url import URLCreate, URLResponse
 
 from app.services import shortener_service
 from app.db.database import Base, engine, get_db
+from dependencies import get_current_user
 
 load_dotenv()
 BASE_URL = os.getenv("BASE_URL")
@@ -22,9 +24,13 @@ def health_check():
 
 
 @router.post("/api/v1/urls", response_model=URLResponse, status_code=201)
-def create_short_url(url_data: URLCreate, db: Session = Depends(get_db)):
+def create_short_url(
+    url_data: URLCreate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
     try:
-        db_url = shortener_service.create_short_url(db, url_data)
+        db_url = shortener_service.create_short_url(db, url_data, current_user)
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc))
 
